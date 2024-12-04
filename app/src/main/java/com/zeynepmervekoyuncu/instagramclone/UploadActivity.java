@@ -27,6 +27,6 @@ public class UploadActivity extends AppCompatActivity {
 
     }
     public void uploadButtonClicked(View view){
-        
+
     }
 }

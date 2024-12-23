@@ -1,4 +1,4 @@
-package com.zeynepmervekoyuncu.instagramclone;
+package com.zeynepmervekoyuncu.instagramclone.view;
 
 import android.Manifest;
 import android.content.Intent;
@@ -23,12 +23,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.zeynepmervekoyuncu.instagramclone.databinding.ActivityUploadBinding;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class UploadActivity extends AppCompatActivity {
@@ -64,7 +67,7 @@ public class UploadActivity extends AppCompatActivity {
         String imageName="images/"+uuid+".jpg"; //her seferinde yeni gorsel ismi olusturmazsak tek bir resim yukleyebiliriz, isimleri ayni olacagindan dolayi
         if(imageData!=null){
             storageReference.child(imageName).putFile(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                //imagedatayı image.jpg olarak firebase'e yuklemek icin
+                //imageDatayı firebase'e yuklemek icin
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // download url'yi alacagiz, veri tabanına(firestore) kaydedecegiz
@@ -77,6 +80,24 @@ public class UploadActivity extends AppCompatActivity {
                             FirebaseUser user=firebaseAuth.getCurrentUser();
                             String email=user.getEmail();
 
+                            HashMap<String, Object> postData = new HashMap<>();
+                            postData.put("useremail",email);
+                            postData.put("downloadurl",downloadUrl);
+                            postData.put("comment",comment);
+                            postData.put("date", FieldValue.serverTimestamp());
+                            firebaseFirestore.collection("Posts").add(postData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Intent intent=new Intent(UploadActivity.this, FeedActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(UploadActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     });
                 }

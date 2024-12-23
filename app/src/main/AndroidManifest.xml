@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!-- burada permission yazarız ama gorsel yukleme dangerous bir izin oldugu icin bu yeterli olmaz -->
+
 
     <application
         android:allowBackup="true"

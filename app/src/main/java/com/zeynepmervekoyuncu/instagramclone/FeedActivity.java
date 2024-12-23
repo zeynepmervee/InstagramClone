@@ -41,7 +41,7 @@ public class FeedActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {      //secilince ne olacagini yazdim
-        if(item.getItemId()==R.id.add_post) { //yani kullanici add_post ayazan yere tikladiysa
+        if(item.getItemId()==R.id.add_post) { //yani kullanici add_post yazan yere tikladiysa
             //upload activity'e gidilecek
             Intent intentToUpload = new Intent(FeedActivity.this, UploadActivity.class); //***************bura onemli, feedactivity'den Uploadactivity'e gecmeyi saglar*****************************
             startActivity(intentToUpload);
@@ -51,6 +51,7 @@ public class FeedActivity extends AppCompatActivity {
             auth.signOut(); //database'in de signout yaptigimizi bilmesi gerekiyor..
 
             Intent intentToMain = new Intent(FeedActivity.this, MainActivity.class); //***************************aynı islem****************************
+            startActivity(intentToMain);
             finish(); //kullanici cikis yaptigi icin finish de yazdik, geri donememesi lazim
         }
         return super.onOptionsItemSelected(item);
